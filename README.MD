@@ -8,18 +8,18 @@ Namen und Begriffe: siehe `docs/nomenklatur.md`.
 | `hs_api/` | Management API (`hs-api`) |
 | `migrations/` | SQL-Migrationen, nummeriert, nie nachträglich ändern |
 | `deploy/` | systemd-Units |
-| `scripts/` | Hilfsskripte für den Mac |
+| `scripts/` | Hilfsskripte |
 
-## Migrationen einspielen (vom Mac/PC)
+## Migrationen einspielen (auf dem Pi)
 
 ```bash
-scripts/push-migration.sh            # Auswahlmenü
-scripts/push-migration.sh 004_x.sql  # direkt
+cd /opt/hs-core && sudo -u homeserver git pull
+scripts/migrate.sh            # Auswahlmenü
+scripts/migrate.sh 004_x.sql  # direkt
 ```
 
-Voraussetzung: SSH-Zugang zum Pi (Host per `HS_PI_HOST`, Standard `hs-core`) und auf dem Pi
-eine `~/.pgpass` mit dem Passwort von `hs_owner`. Jede Migration steht in `BEGIN; … COMMIT;`
-und trägt sich am Ende selbst in `schema_migrations` ein.
+Voraussetzung: eine `~/.pgpass` des aufrufenden Benutzers mit dem Passwort von `hs_owner`.
+Jede Migration steht in `BEGIN; … COMMIT;` und trägt sich am Ende selbst in `schema_migrations` ein.
 
 ## Installation auf dem Pi
 
