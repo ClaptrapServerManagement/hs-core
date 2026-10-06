@@ -1,0 +1,18 @@
+[Unit]
+Description=Homeserver Manager – Management API (hs-api)
+After=network-online.target postgresql.service time-sync.target
+Wants=network-online.target time-sync.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=homeserver
+Group=homeserver
+WorkingDirectory=/opt/hs-core
+EnvironmentFile=/etc/homeserver/secrets.env
+ExecStart=/opt/hs-core/.venv/bin/python -m hs_api.main
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
