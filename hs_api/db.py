@@ -2,7 +2,7 @@ from collections.abc import AsyncIterator
 
 import asyncpg
 
-import config
+from . import config
 
 async def connect() -> None:
     global _pool
@@ -21,6 +21,7 @@ async def close() -> None:
         await _pool.close()
 
 async def get_conn() -> AsyncIterator[asyncpg.Connection]:
-    assert _pool is not None, "Datenbank nict verbunden"
+    global _pool
+    assert _pool is not None, "Datenbank nicht verbunden"
     async with _pool.acquire() as conn:
         yield conn
