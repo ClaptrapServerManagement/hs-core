@@ -25,3 +25,7 @@ async def get_conn() -> AsyncIterator[asyncpg.Connection]:
     assert _pool is not None, "Datenbank nicht verbunden"
     async with _pool.acquire() as conn:
         yield conn
+
+def pool() -> asyncpg.Pool:
+    assert _pool is not None, "Datenbank nicht verbunden"
+    return _pool
