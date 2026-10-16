@@ -11,7 +11,7 @@ from .errors import ApiError
 
 AGENT_KINDS = {"power_controller", "host_agent", "vm_agent", "service_manager"}
 
-_bearer = HTTPBearer(auth_error=False)
+_bearer = HTTPBearer(auto_error=False)
 
 def generate_token() -> str:
     return secrets.token_urlsafe(32)
