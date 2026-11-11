@@ -1,4 +1,4 @@
-import asyncgp
+import asyncpg
 
 from .errors import ApiError
 from .events import log_event

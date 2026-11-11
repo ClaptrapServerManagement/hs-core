@@ -1,4 +1,4 @@
-import asyncgp
+import asyncpg
 from fastapi import APIRouter, Depends
 
 
