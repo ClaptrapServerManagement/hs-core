@@ -10,6 +10,7 @@ from .db import get_conn
 from .errors import ApiError
 
 AGENT_KINDS = {"power_controller", "host_agent", "vm_agent", "service_manager"}
+ADMIN_KINDS = {"dashboard"}
 
 _bearer = HTTPBearer(auto_error=False)
 
@@ -43,4 +44,9 @@ async def get_caller(
 async def require_agent(caller: Caller = Depends(get_caller)) -> Caller:
     if caller.kind not in AGENT_KINDS:
         raise ApiError(403, "forbidden", f"Komponente '{caller.name}' darf das nicht.")
+    return caller
+
+async def require_admin(caller: Caller = Depends(get_caller)) -> Caller:
+    if caller.kind not in ADMIN_KINDS:
+        raise ApiError(403, "admin_required", f"Komponente '{caller.name}' darf das System nicht verwalten.")
     return caller
