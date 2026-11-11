@@ -1,0 +1,18 @@
+[Unit]
+Description=Homeserver Manager – Power Controller (hs-power-controller)
+After=network-online.target hs-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=homeserver
+Group=homeserver
+SupplementaryGroups=gpio
+WorkingDirectory=/opt/hs-core
+EnvironmentFile=/etc/homeserver/hs-power-controller.env
+ExecStart=/opt/hs-core/.venv/bin/python -m hs_power_controller.main
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

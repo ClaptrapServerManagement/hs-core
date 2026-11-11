@@ -50,3 +50,40 @@ class ResourceOut(BaseModel):
     status_detail: str | None
     status_since: datetime
     last_seen_at: datetime | None
+
+# COMMANDS
+class CommandStatus(StrEnum):
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
+class IdentityRef(BaseModel):
+    provider: str = Field(examples=["discord"])
+    external_id: str = Field(examples=["123456789012345678"])
+
+class CommandIn(BaseModel):
+    action: str = Field(examples=["host.power_on"])
+    target: str = Field(examples=["pve01"])
+    requested_by: IdentityRef | None = None
+    parameters: dict = Field(default_factory=dict)
+
+class CommandOut(BaseModel):
+    id: int
+    action: str
+    target: str
+    source: str
+    requested_by: str | None
+    status: CommandStatus
+    parameters: dict
+    result: dict | None
+    error_message: str | None
+    created_at: datetime
+    started_at: datetime | None
+    finished_at: datetime | None
+
+class CommandResultIn(BaseModel):
+    status: CommandStatus = Field(examples=["completed"])
+    result: dict | None = None
+    error_message : str | None = Field(default=None, max_lengh=1000)

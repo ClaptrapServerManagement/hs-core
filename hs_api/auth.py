@@ -24,15 +24,16 @@ class Caller:
     id: int
     kind: str
     name: str
+    resource_id: int | None
 
 async def get_caller(
-        credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
-        conn: asyncpg.Connection = Depends(get_conn)
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer),
+    conn: asyncpg.Connection = Depends(get_conn),
 ) -> Caller:
     if credentials is None:
         raise ApiError(401, "unauthorized", "Bearer-Token fehlt.")
     row = await conn.fetchrow(
-        "SELECT id, kind::text AS kind, name FROM components WHERE api_token_hash = $1",
+        "SELECT id, kind::text AS kind, name, resource_id FROM components WHERE api_token_hash = $1",
         hash_token(credentials.credentials),
     )
     if row is None:
@@ -42,3 +43,4 @@ async def get_caller(
 async def require_agent(caller: Caller = Depends(get_caller)) -> Caller:
     if caller.kind not in AGENT_KINDS:
         raise ApiError(403, "forbidden", f"Komponente '{caller.name}' darf das nicht.")
+    return caller
