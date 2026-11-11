@@ -51,6 +51,21 @@ sudo -u homeserver bash -c 'set -a; . /etc/homeserver/secrets.env; cd /opt/hs-co
 
 Das Token wird nur einmal angezeigt. Erneuter Aufruf mit demselben Namen erzeugt ein neues Token.
 
+## Welche Komponente darf was
+
+| Token von | Darf |
+| --- | --- |
+| `dashboard` | alles, inklusive Verwaltung von Ressourcen, Usern, Rollen, Permissions, Settings |
+| `discord_bot` | lesen, Commands und Scheduled Actions anlegen/bearbeiten, immer mit `requested_by` |
+| Agents (`power_controller`, `host_agent`, `vm_agent`, `service_manager`) | lesen, Status und Use-Cases melden, Commands abholen und Ergebnis melden |
+
+Zum Verwalten per `curl` oder in `/api/v1/docs`, solange es noch kein Dashboard gibt:
+
+```bash
+sudo -u homeserver bash -c 'set -a; . /etc/homeserver/secrets.env; cd /opt/hs-core; \
+  .venv/bin/python -m hs_api.tools.create_component dashboard hs-dashboard'
+```
+
 ## Update
 
 ```bash
